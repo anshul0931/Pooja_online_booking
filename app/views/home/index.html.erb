@@ -1,0 +1,70 @@
+<%= render 'shared/header' %>
+
+<!-- Swiper Slider Container -->
+<div class="swiper mySwiper" style="width: 100%; padding: 40px 0;">
+  <div class="swiper-wrapper">
+    
+    <!-- Slide 1 -->
+    <div class="swiper-slide">
+      <%= image_tag "Frame-32.png", style: "width: 100%; border-radius: 10px;" %>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="swiper-slide">
+      <%= image_tag "Frame-25-1.png", style: "width: 100%; border-radius: 10px;" %>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="swiper-slide">
+      <%= image_tag "images.jpeg", style: "width: 100%; border-radius: 10px;" %>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="swiper-slide">
+      <%= image_tag "Frame-2072750009.png", style: "width: 100%; length: 60%; border-radius: 10px;" %>
+    </div>
+
+  </div>
+
+  <!-- Optional Arrows & Dots -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    new Swiper(".mySwiper", {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      loop: true,
+      autoplay: {
+        delay: 1000,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        // When screen is <= 768px
+        768: {
+          slidesPerView: 1,
+        },
+        // When screen is > 768px
+        1024: {
+          slidesPerView: 2,
+        },
+        // When screen is > 1200px
+        1200: {
+          slidesPerView: 3,
+        },
+      }
+    });
+  });
+</script>
+
+
+<%= render 'shared/footer' %>
