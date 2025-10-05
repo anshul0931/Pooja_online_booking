@@ -1,0 +1,5 @@
+<h2><%= @puja.title %></h2>
+<p><%= @puja.description %></p>
+<p><strong>Price: ₹ <%= @puja.base_price %></strong></p>
+
+<%= link_to "Book This Puja", new_puja_booking_path(@puja), class: "btn btn-success" %>

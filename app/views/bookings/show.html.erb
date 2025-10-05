@@ -1,0 +1,14 @@
+<h2>Booking Confirmation</h2>
+
+<p><strong>Name:</strong> <%= @booking.name %></p>
+<p><strong>Email:</strong> <%= @booking.email %></p>
+<p><strong>Phone:</strong> <%= @booking.phone %></p>
+<p><strong>Puja:</strong> <%= @booking.puja.title %></p>
+<p><strong>Date:</strong> <%= @booking.slot_date %></p>
+<p><strong>Time:</strong> <%= @booking.time_slot %></p>
+<p><strong>Customer Type:</strong> <%= @booking.customer_type %></p>
+<p><strong>Total Amount:</strong> ₹ <%= @booking.total_amount %></p>
+
+<div class="alert alert-info mt-3">
+  ✅ Your booking is successful! Our team will contact you soon.
+</div>

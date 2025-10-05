@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  temple: one
+  title: MyString
+  description: MyText
+  duration_minutes: 1
+  base_price: 9.99
+
+two:
+  temple: two
+  title: MyString
+  description: MyText
+  duration_minutes: 1
+  base_price: 9.99

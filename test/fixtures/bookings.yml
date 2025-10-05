@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pooja_type: one
+  user_name: MyString
+  phone: MyString
+  email: MyString
+  samagri_required: false
+  package: MyString
+  status: MyString
+  notes: MyText
+  location: MyString
+
+two:
+  pooja_type: two
+  user_name: MyString
+  phone: MyString
+  email: MyString
+  samagri_required: false
+  package: MyString
+  status: MyString
+  notes: MyText
+  location: MyString

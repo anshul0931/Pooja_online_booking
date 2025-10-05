@@ -1,0 +1,81 @@
+<h1 class="mb-5 text-center fw-bold">Book Your Pooja</h1>
+
+<div class="booking-form-wrapper mx-auto p-4 shadow-lg rounded">
+  <h3 class="text-center mb-3"><%= @pooja.title %> - ₹<%= @pooja.base_price %></h3>
+
+  <%= form_with model: @booking, url: puja_bookings_path(@pooja), local: true do |f| %>
+
+    <div class="mb-3">
+      <%= f.label :user_name, "Full Name", class: "form-label fw-semibold" %>
+      <%= f.text_field :user_name, class: "form-control custom-input", placeholder: "Enter your full name" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :phone, "Phone Number", class: "form-label fw-semibold" %>
+      <%= f.telephone_field :phone, class: "form-control custom-input", placeholder: "Enter your mobile number" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :email, "Email Address", class: "form-label fw-semibold" %>
+      <%= f.email_field :email, class: "form-control custom-input", placeholder: "Enter your email" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :customer_type, "Booking Type", class: "form-label fw-semibold" %>
+      <%= f.select :customer_type, options_for_select([["Indian", "Indian"], ["NRI", "NRI"]]), {}, class: "form-select custom-input" %>
+    </div>
+
+    <div class="mb-3 form-check">
+      <%= f.check_box :samagri_required, class: "form-check-input" %>
+      <%= f.label :samagri_required, "Samagri Required?", class: "form-check-label fw-semibold" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :booking_date, "Booking Date", class: "form-label fw-semibold" %>
+      <%= f.date_field :booking_date, class: "form-control custom-input" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :location, "Location / Temple Address", class: "form-label fw-semibold" %>
+      <%= f.text_field :location, class: "form-control custom-input", placeholder: "Enter location" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :address, "Address (Optional)", class: "form-label fw-semibold" %>
+      <%= f.text_field :address, class: "form-control custom-input", placeholder: "Enter address" %>
+    </div>
+
+    <%= f.submit "Book Now", class: "btn btn-orange w-100" %>
+  <% end %>
+</div>
+
+<style>
+.booking-form-wrapper {
+  max-width: 600px;
+  background: #fff;
+  border-radius: 20px;
+}
+
+.custom-input {
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  transition: all 0.3s;
+}
+.custom-input:focus {
+  border-color: #d94f00;
+  box-shadow: 0 0 0 0.2rem rgba(217,79,0,0.25);
+}
+
+.form-label { margin-bottom: 0.4rem; color: #333; }
+
+.btn-orange {
+  background-color: #d94f00;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 0.7rem;
+  transition: background 0.3s, transform 0.2s;
+}
+.btn-orange:hover { background-color: #b74300; transform: translateY(-3px); }
+</style>
