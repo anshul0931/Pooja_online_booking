@@ -3,7 +3,7 @@
   <div class="container top-bar-content">
     <div class="left">
       <span>📧 <a href="mailto:info@pujaseva.com">info@pujaseva.com</a></span>
-      <span>📞 +91-9109001609 / 9188901230</span>
+      <span>📞 +91-91 / 9188901230</span>
     </div>
     <div class="right">
       <span class="language-button">हिंदी में देखने के लिए</span>
@@ -36,9 +36,49 @@
   </div>
 </header>
 
+<!-- 🔹 Hero Section -->
+<section class="hero text-center text-white py-5" style="background: url('/assets/puja-hero.jpg') center/cover no-repeat; position:relative;">
+  <div style="background: rgba(0,0,0,0.4); position:absolute; inset:0;"></div>
+  <div class="container position-relative">
+    <h1 class="fw-bold mb-2">Book Your Pooja</h1>
+    <p class="mb-0">Select from a wide range of Pujas and book instantly</p>
+  </div>
+</section>
+
+<!-- 🔹 Pujas Cards -->
+<section class="puja-list py-5">
+  <div class="container">
+    <% if @pujas.present? %>
+      <div class="row g-4">
+        <% @pujas.each do |puja| %>
+          <div class="col-lg-4 col-md-6">
+            <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+              <% if puja.image.attached? %>
+                <%= image_tag puja.image, class: "card-img-top", style: "height:200px; object-fit:cover;" %>
+              <% else %>
+                <img src="https://via.placeholder.com/300x200" class="card-img-top">
+              <% end %>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold mb-1"><%= puja.name %></h5>
+                <p class="card-text text-muted mb-2" style="font-size: 0.9rem;"><%= truncate(puja.description, length: 100) %></p>
+                <div class="mt-auto d-flex justify-content-between align-items-center">
+                  <span class="fw-bold">₹<%= puja.price %></span>
+                  <%= link_to "Book", puja_path(puja), class: "btn btn-sm btn-primary rounded-2" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-center text-muted mt-4">🙏 No Pujas available right now.</p>
+    <% end %>
+  </div>
+</section>
+
 <!-- 🔹 CSS -->
 <style>
-  /* Full width top bar */
+  /* Top Bar */
   .top-bar {
     width: 100%;
     background-color: #f0501e;
@@ -46,7 +86,6 @@
     font-size: 14px;
   }
 
-  /* Centered content inside top bar */
   .top-bar .top-bar-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -75,14 +114,13 @@
     font-size: 13px;
   }
 
-  /* Full width header background */
+  /* Header */
   header {
     width: 100%;
     background: white;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
 
-  /* Centered content inside header */
   .header-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -109,6 +147,17 @@
     color: #f44300;
   }
 
+  /* Hero Section */
+  .hero h1 { font-size: 2.5rem; }
+  .hero p { font-size: 1.1rem; }
+
+  /* Pujas Cards */
+  .card:hover {
+    transform: translateY(-3px);
+    transition: all 0.2s ease;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.15);
+  }
+
   /* Responsive */
   @media (max-width: 768px) {
     .header-content, .top-bar-content {
@@ -116,12 +165,8 @@
       align-items: flex-start;
       gap: 10px;
     }
-
-    nav a {
-      margin: 0 8px 0 0;
-    }
+    nav a { margin: 0 8px 0 0; }
   }
 </style>
 
-<!-- Font Awesome Icons -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
