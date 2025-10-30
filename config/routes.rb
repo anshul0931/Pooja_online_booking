@@ -2,13 +2,15 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  root "pujas#index"  # show all pujas as home
+  root "pujas#index"
+
+  get "/about", to: "pages#about"
+  get "/services", to: "pages#services"
+  get "/contact", to: "pages#contact"
 
   resources :pujas, only: [:index, :show] do
     resources :bookings, only: [:new, :create]
   end
 
-  resources :bookings, only: [:new, :create] do
-    get 'thank_you', on: :member
-  end
+  get "bookings/:id/thank_you", to: "bookings#thank_you", as: "thank_you_booking"
 end
