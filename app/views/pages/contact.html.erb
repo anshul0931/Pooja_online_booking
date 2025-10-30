@@ -1,0 +1,74 @@
+<section class="container my-5">
+  <h1 class="text-center fw-bold mb-4">Contact Us</h1>
+  <p class="text-center text-muted mb-5">
+    Have questions or need assistance? Reach out to us and we’ll get back to you promptly.
+  </p>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="contact-form-wrapper p-4 shadow-lg rounded bg-white">
+        <%= form_with url: "/contact_submit", method: :post, local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :name, "Full Name", class: "form-label fw-semibold" %>
+            <%= f.text_field :name, class: "form-control custom-input", placeholder: "Enter your full name" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :email, "Email Address", class: "form-label fw-semibold" %>
+            <%= f.email_field :email, class: "form-control custom-input", placeholder: "Enter your email" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :phone, "Phone Number", class: "form-label fw-semibold" %>
+            <%= f.telephone_field :phone, class: "form-control custom-input", placeholder: "Enter your phone number" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :message, "Message", class: "form-label fw-semibold" %>
+            <%= f.text_area :message, class: "form-control custom-input", rows: 4, placeholder: "Write your message here" %>
+          </div>
+
+          <%= f.submit "Send Message", class: "btn btn-orange w-100" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.contact-form-wrapper {
+  border-radius: 20px;
+}
+
+/* Inputs */
+.custom-input {
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  transition: all 0.3s;
+}
+.custom-input:focus {
+  border-color: #d94f00;
+  box-shadow: 0 0 0 0.2rem rgba(217,79,0,0.25);
+}
+
+/* Labels */
+.form-label {
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+/* Button */
+.btn-orange {
+  background-color: #d94f00;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 0.7rem;
+  transition: background 0.3s, transform 0.2s;
+}
+.btn-orange:hover {
+  background-color: #b74300;
+  transform: translateY(-3px);
+}
+</style>

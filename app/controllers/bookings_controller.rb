@@ -2,25 +2,24 @@ class BookingsController < ApplicationController
   before_action :set_puja, only: [:new, :create]
 
   def new
-    @booking = Booking.new(puja_id: @pooja.id, total_price: @pooja.base_price)
+    @booking = Booking.new(puja_id: @pooja.id, total_price: @pooja.base_price.to_f)
   end
 
   def create
-    @booking = Booking.new(booking_params)
-    @booking.puja_id = @pooja.id
-    @booking.total_price = @pooja.base_price
+    @booking = @pooja.bookings.build(booking_params)
+    @booking.total_price = @pooja.base_price.to_f
 
     if @booking.save
       redirect_to thank_you_booking_path(@booking)
     else
       flash.now[:alert] = "Error creating booking. Please check the details."
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   def thank_you
     @booking = Booking.find(params[:id])
-    @pooja = @booking.puja  # ✅ get puja from booking
+    @pooja = @booking.puja
   end
 
   private

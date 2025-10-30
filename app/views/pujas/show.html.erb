@@ -1,5 +1,20 @@
-<h2><%= @puja.title %></h2>
-<p><%= @puja.description %></p>
-<p><strong>Price: ₹ <%= @puja.base_price %></strong></p>
+<div class="container text-center my-5 p-4 rounded shadow-sm" style="background: #fff8f0; border: 1px solid #ffe1c2; max-width: 700px;">
+  <h2 class="fw-bold mb-3" style="color: #d35400; font-family: 'Poppins', sans-serif;">
+    <%= @puja.title %>
+  </h2>
 
-<%= link_to "Book This Puja", new_puja_booking_path(@puja), class: "btn btn-success" %>
+  <p style="color: #5a4632; font-size: 1rem; line-height: 1.6;">
+    <%= @puja.description %>
+  </p>
+
+  <p class="mt-3 mb-4" style="font-size: 1.1rem; color: #bf360c;">
+    <strong>Price:</strong> ₹ <%= @puja.base_price %>
+  </p>
+
+  <%= link_to "🕉 Book This Pooja", new_puja_booking_path(@puja),
+    class: "fw-bold text-white",
+    style: "background-color: #f57c00; border:none; padding:10px 30px; border-radius:30px; text-decoration:none; font-size:1.1rem; box-shadow:0 4px 10px rgba(0,0,0,0.15); transition: all 0.3s;",
+    onmouseover: "this.style.backgroundColor='#e65100';",
+    onmouseout: "this.style.backgroundColor='#f57c00';"
+  %>
+</div>
