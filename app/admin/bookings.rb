@@ -1,6 +1,6 @@
 ActiveAdmin.register Booking do
   # ✅ Permit the correct attributes
-  permit_params :puja_id, :user_name, :phone, :email, :samagri_required,
+  permit_params :puja_id, :user_name, :phone, :email, :gotra, :samagri_required,
                 :package, :status, :notes, :location, :booking_date, :customer_type,
                 :address, :total_price, :payment_method
 
@@ -12,6 +12,7 @@ ActiveAdmin.register Booking do
     column :user_name
     column :phone
     column :email
+    column :gotra
     column :customer_type
     column :payment_method
     column :status
@@ -24,6 +25,7 @@ ActiveAdmin.register Booking do
   filter :puja
   filter :user_name
   filter :email
+  filter :gotra
   filter :status
   filter :customer_type
   filter :payment_method
@@ -36,6 +38,7 @@ ActiveAdmin.register Booking do
       f.input :user_name
       f.input :phone
       f.input :email
+      f.input :gotra, label: "Gotra"
       f.input :customer_type, as: :select, collection: ["Indian", "NRI"]
       f.input :payment_method, as: :select, collection: ["Cash on Pooja", "Bank Transfer", "UPI"]
       f.input :samagri_required
@@ -56,6 +59,7 @@ ActiveAdmin.register Booking do
       row :user_name
       row :phone
       row :email
+      row :gotra
       row :customer_type
       row :payment_method
       row :samagri_required
