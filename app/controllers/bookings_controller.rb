@@ -30,7 +30,7 @@ class BookingsController < ApplicationController
 
   def booking_params
     params.require(:booking).permit(
-      :user_name, :phone, :email, :samagri_required,
+      :user_name, :phone, :email, :gotra, :samagri_required,
       :customer_type, :status, :notes, :location,
       :address, :booking_date
     )

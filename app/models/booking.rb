@@ -9,10 +9,11 @@ class Booking < ApplicationRecord
   validates :booking_date, presence: { message: "can't be blank" }
   validates :location, presence: { message: "can't be blank" }
   validates :puja_id, presence: true
+  validates :gotra, presence: { message: "can't be blank" } # ✅ new validation added
 
   def self.ransackable_attributes(auth_object = nil)
     %w[
-      id user_name phone email samagri_required status notes location booking_date
+      id user_name phone email gotra samagri_required status notes location booking_date
       customer_type address total_price puja_id created_at updated_at
     ]
   end
