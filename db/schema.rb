@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_05_075701) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_30_104519) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,6 +84,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_05_075701) do
     t.string "customer_type", default: "Normal"
     t.string "address"
     t.decimal "total_price", precision: 10, scale: 2
+    t.string "gotra"
     t.index ["puja_id"], name: "index_bookings_on_puja_id"
   end
 
