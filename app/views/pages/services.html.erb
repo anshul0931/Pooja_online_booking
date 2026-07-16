@@ -1,54 +1,62 @@
-<section class="our-services py-5">
-  <div class="container">
-    <h1 class="text-center fw-bold mb-5" style="color: #d94f00;">Our Services</h1>
-
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8">
-        <h3 class="fw-bold mb-3" style="color: #d94f00;">Havan & Yagya</h3>
-        <p style="font-size: 1.1rem; color: #333;">
-          Experience sacred <strong>Havan</strong> and <strong>Yagya</strong> rituals performed by expert priests in Ujjain.  
-          Ideal for festivals, ceremonies, and personal spiritual growth — done with devotion and tradition.
-        </p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8">
-        <h3 class="fw-bold mb-3" style="color: #d94f00;">Special Poojas</h3>
-        <p style="font-size: 1.1rem; color: #333;">
-          From <strong>festival poojas</strong> to <strong>wedding ceremonies</strong>, book your ritual easily with options 
-          for samagri, personalized priest selection, and authentic spiritual arrangements.
-        </p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center mb-5">
-      <div class="col-lg-8">
-        <h3 class="fw-bold mb-3" style="color: #d94f00;">Spiritual Guidance</h3>
-        <p style="font-size: 1.1rem; color: #333;">
-          Seek clarity and peace with <strong>spiritual guidance</strong> from experienced Vedic practitioners.  
-          We help you select the right pooja for your needs and intentions.
-        </p>
-      </div>
-    </div>
-
-    <div class="text-center mt-5">
-      <%= link_to "Book Your Pooja", root_path, class: "btn btn-orange btn-lg" %>
-    </div>
+<!-- 🌸 Static Hero Section -->
+<section class="hero-static" style="background-image: url('<%= asset_path('ganeshji.webp') %>');">
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>Our Spiritual Services</h1>
+    <p>Offering authentic Vedic rituals, custom samagri seva, and spiritual guidance directly from Ujjain.</p>
   </div>
 </section>
 
-<style>
-.btn-orange {
-  background-color: #d94f00;
-  color: #fff;
-  font-weight: 700;
-  border-radius: 50px;
-  padding: 0.7rem 2rem;
-  transition: background 0.3s, transform 0.2s;
-}
-.btn-orange:hover {
-  background-color: #b74300;
-  transform: translateY(-3px);
-}
-</style>
+<!-- 🌸 Services Content Grid -->
+<section class="our-services py-4">
+  <div class="container px-0">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-9">
+        
+        <!-- Service 1 -->
+        <div class="bg-white rounded-3 shadow-md border p-4 p-md-5 mb-4 scroll-reveal" data-controller="scroll-reveal">
+          <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-2">
+            <span class="fs-2 text-saffron"><i class="fa-solid fa-fire-burner"></i></span>
+            <h2 class="h4 fw-bold mb-0" style="font-family: var(--font-heading);">Havan & Yagya Rituals</h2>
+          </div>
+          <p style="font-size: 1.05rem; color: var(--text-primary); line-height: 1.7; font-family: 'Noto Serif', serif;">
+            Experience sacred Havans (such as Maha Rudra Havan, Navgrah Shanti Havan, and Baglamukhi Anushthan) performed directly by high-caliber pandits in Ujjain. 
+            Excellent for resolving obstacles, home purification, business growth, and general family well-being.
+          </p>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="bg-white rounded-3 shadow-md border p-4 p-md-5 mb-4 scroll-reveal" data-controller="scroll-reveal">
+          <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-2">
+            <span class="fs-2 text-saffron"><i class="fa-solid fa-om"></i></span>
+            <h2 class="h4 fw-bold mb-0" style="font-family: var(--font-heading);">Dosha Nivaran Pujas</h2>
+          </div>
+          <p style="font-size: 1.05rem; color: var(--text-primary); line-height: 1.7; font-family: 'Noto Serif', serif;">
+            Specialized planetary remedies such as Kaal Sarp Dosh Shanti, Mangalik Dosh Bhat Puja, Ark/Ghat Vivah, and Rin Mukti Seva conducted 
+            at specific energetic centers in Ujjain. Complete with custom gotra recitation and live streaming clips.
+          </p>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="bg-white rounded-3 shadow-md border p-4 p-md-5 mb-4 scroll-reveal" data-controller="scroll-reveal">
+          <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-2">
+            <span class="fs-2 text-saffron"><i class="fa-solid fa-hands-holding"></i></span>
+            <h2 class="h4 fw-bold mb-0" style="font-family: var(--font-heading);">Pitru Tarpan & Pind Daan</h2>
+          </div>
+          <p style="font-size: 1.05rem; color: var(--text-primary); line-height: 1.7; font-family: 'Noto Serif', serif;">
+            Conduct authentic Shradh, Pitru Tarpan, and Pind Daan rituals at the holy Siddhwat or Ram Ghat in Ujjain for the peace of ancestral souls, 
+            bringing harmony, peace of mind, and clearing hurdles in lineage success.
+          </p>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center mt-5">
+          <%= link_to new_custom_booking_path, class: "btn-premium btn-saffron px-5 py-3 fs-6 text-decoration-none" do %>
+            🕉 Book Custom Seva
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

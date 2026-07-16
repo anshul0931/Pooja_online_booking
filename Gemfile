@@ -14,6 +14,7 @@ gem "puma", ">= 5.0"
 
 # Use JavaScript with ESM import maps
 gem "importmap-rails"
+gem "debug", platforms: [:mri]
 
 # Hotwire's SPA-like page accelerator
 gem "turbo-rails"
@@ -38,7 +39,7 @@ gem 'sassc-rails'
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Reduces boot times through caching
 gem "bootsnap", require: false
@@ -48,7 +49,7 @@ gem "bootsnap", require: false
 
 group :development, :test do
   # Debugging with the debug gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem 'byebug'
 
   # Static analysis for security vulnerabilities
   gem "brakeman", require: false

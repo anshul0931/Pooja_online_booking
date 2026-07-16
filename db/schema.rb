@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_30_104519) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_12_171500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,6 +86,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_30_104519) do
     t.decimal "total_price", precision: 10, scale: 2
     t.string "gotra"
     t.index ["puja_id"], name: "index_bookings_on_puja_id"
+  end
+
+  create_table "custom_bookings", force: :cascade do |t|
+    t.string "user_name", null: false
+    t.string "phone", null: false
+    t.string "email", null: false
+    t.string "gotra"
+    t.text "seva_description", null: false
+    t.date "preferred_date"
+    t.string "location"
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pooja_types", force: :cascade do |t|

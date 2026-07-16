@@ -1,74 +1,189 @@
-<section class="container my-5">
-  <h1 class="text-center fw-bold mb-4">Contact Us</h1>
-  <p class="text-center text-muted mb-5">
-    Have questions or need assistance? Reach out to us and we’ll get back to you promptly.
-  </p>
-
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="contact-form-wrapper p-4 shadow-lg rounded bg-white">
-        <%= form_with url: "/contact_submit", method: :post, local: true do |f| %>
-          <div class="mb-3">
-            <%= f.label :name, "Full Name", class: "form-label fw-semibold" %>
-            <%= f.text_field :name, class: "form-control custom-input", placeholder: "Enter your full name" %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :email, "Email Address", class: "form-label fw-semibold" %>
-            <%= f.email_field :email, class: "form-control custom-input", placeholder: "Enter your email" %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :phone, "Phone Number", class: "form-label fw-semibold" %>
-            <%= f.telephone_field :phone, class: "form-control custom-input", placeholder: "Enter your phone number" %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.label :message, "Message", class: "form-label fw-semibold" %>
-            <%= f.text_area :message, class: "form-control custom-input", rows: 4, placeholder: "Write your message here" %>
-          </div>
-
-          <%= f.submit "Send Message", class: "btn btn-orange w-100" %>
-        <% end %>
-      </div>
-    </div>
+<!-- 🌸 Static Hero Section -->
+<section class="hero-static" style="background-image: url('<%= asset_path('Mahakaleshwar.webp') %>');">
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>Contact Our Pandits</h1>
+    <p>Reach out to resolve custom puja queries, schedule live streams, or receive spiritual consulting from Ujjain.</p>
   </div>
 </section>
 
-<style>
-.contact-form-wrapper {
-  border-radius: 20px;
-}
+<div class="container my-5" data-controller="contact">
+  <div class="row justify-content-center g-4">
 
-/* Inputs */
-.custom-input {
-  border-radius: 12px;
-  padding: 0.6rem 1rem;
-  border: 1px solid #ddd;
-  transition: all 0.3s;
-}
-.custom-input:focus {
-  border-color: #d94f00;
-  box-shadow: 0 0 0 0.2rem rgba(217,79,0,0.25);
-}
+    <!-- 🕉 Contact Information Card (Left on desktop, top on mobile) -->
+    <div class="col-lg-5 col-md-6 scroll-reveal" data-controller="scroll-reveal">
+      <div class="bg-white p-4 p-md-5 rounded-3 shadow-md border h-100" style="border-top: 4px solid var(--gold-color);">
+        <h2 class="h4 mb-4" style="font-family: var(--font-heading); font-weight: 700; color: var(--primary-color);">
+          <i class="fa-solid fa-om text-saffron me-2"></i> Get In Touch
+        </h2>
 
-/* Labels */
-.form-label {
-  margin-bottom: 0.4rem;
-  color: #333;
-}
+        <!-- Address -->
+        <div class="d-flex align-items-start gap-3 mb-4">
+          <span class="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                style="width: 42px; height: 42px; background: var(--accent-light);">
+            <i class="fa-solid fa-location-dot" style="color: var(--secondary-color);"></i>
+          </span>
+          <div>
+            <h3 class="h6 fw-bold mb-1" style="font-family: var(--font-heading); color: var(--primary-color);">Our Address</h3>
+            <!-- TODO: Replace with actual business address -->
+            <p class="mb-0" style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+              Mahakal Marg, Near Mahakaleshwar Temple,<br>
+              Ujjain, Madhya Pradesh 456001, India
+            </p>
+          </div>
+        </div>
 
-/* Button */
-.btn-orange {
-  background-color: #d94f00;
-  color: #fff;
-  font-weight: 700;
-  border-radius: 50px;
-  padding: 0.7rem;
-  transition: background 0.3s, transform 0.2s;
-}
-.btn-orange:hover {
-  background-color: #b74300;
-  transform: translateY(-3px);
-}
-</style>
+        <!-- Email -->
+        <div class="d-flex align-items-start gap-3 mb-4">
+          <span class="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                style="width: 42px; height: 42px; background: var(--accent-light);">
+            <i class="fa-solid fa-envelope" style="color: var(--secondary-color);"></i>
+          </span>
+          <div>
+            <h3 class="h6 fw-bold mb-1" style="font-family: var(--font-heading); color: var(--primary-color);">Email</h3>
+            <a href="mailto:info@ujjainbookmypooja.com" style="color: var(--text-muted); font-size: 14px; text-decoration: none;">
+              info@ujjainbookmypooja.com
+            </a>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="d-flex align-items-start gap-3 mb-4">
+          <span class="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                style="width: 42px; height: 42px; background: var(--accent-light);">
+            <i class="fa-solid fa-phone" style="color: var(--secondary-color);"></i>
+          </span>
+          <div>
+            <h3 class="h6 fw-bold mb-1" style="font-family: var(--font-heading); color: var(--primary-color);">Phone</h3>
+            <a href="tel:+917987488586" style="color: var(--text-muted); font-size: 14px; text-decoration: none;">
+              +91-7987488586
+            </a>
+          </div>
+        </div>
+
+        <!-- Business Hours -->
+        <div class="d-flex align-items-start gap-3 mb-4">
+          <span class="d-inline-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                style="width: 42px; height: 42px; background: var(--accent-light);">
+            <i class="fa-regular fa-clock" style="color: var(--secondary-color);"></i>
+          </span>
+          <div>
+            <h3 class="h6 fw-bold mb-1" style="font-family: var(--font-heading); color: var(--primary-color);">Business Hours</h3>
+            <!-- TODO: Update with actual hours if different -->
+            <p class="mb-0" style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+              Mon – Sat: 9:00 AM – 7:00 PM IST<br>
+              Sunday: By Appointment Only
+            </p>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <hr style="border-color: var(--border-color);">
+
+        <!-- Social Media Links -->
+        <div>
+          <h3 class="h6 fw-bold mb-3" style="font-family: var(--font-heading); color: var(--primary-color);">Follow Us</h3>
+          <div class="d-flex gap-3">
+            <a href="#" aria-label="Facebook"
+               class="d-inline-flex align-items-center justify-content-center rounded-circle"
+               style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-color), #54000C); color: #fff; transition: var(--transition-smooth);">
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="#" aria-label="Instagram"
+               class="d-inline-flex align-items-center justify-content-center rounded-circle"
+               style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--secondary-color), #BF360C); color: #fff; transition: var(--transition-smooth);">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="#" aria-label="YouTube"
+               class="d-inline-flex align-items-center justify-content-center rounded-circle"
+               style="width: 40px; height: 40px; background: linear-gradient(135deg, #c4302b, #8a1c18); color: #fff; transition: var(--transition-smooth);">
+              <i class="fa-brands fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 🔷 Form Column (Right on desktop, bottom on mobile) -->
+    <div class="col-lg-7 col-md-6">
+
+      <!-- Form Card (Visible by default) -->
+      <div class="bg-white p-4 p-md-5 rounded-3 shadow-md border" data-contact-target="formCard">
+        <h2 class="h4 text-center mb-4" style="font-family: var(--font-heading); font-weight:700;">
+          Send Us a Message
+        </h2>
+
+        <%= form_with url: "/contact_submit", method: :post, local: true, html: { data: { contact_target: "form", action: "submit->contact#submit" }, novalidate: true } do |f| %>
+          
+          <div class="mb-3">
+            <%= f.label :name, "Full Name *", class: "form-label" %>
+            <%= f.text_field :name, 
+                             class: "custom-input", 
+                             placeholder: "Enter your full name", 
+                             required: true,
+                             data: { contact_target: "nameInput" } %>
+            <div class="invalid-feedback">Please enter your name.</div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :email, "Email Address *", class: "form-label" %>
+            <%= f.email_field :email, 
+                              class: "custom-input", 
+                              placeholder: "devotee@example.com", 
+                              required: true %>
+            <div class="invalid-feedback">Please enter a valid email address.</div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :phone, "Phone Number *", class: "form-label" %>
+            <%= f.telephone_field :phone, 
+                                  class: "custom-input", 
+                                  placeholder: "e.g. 9876543210", 
+                                  required: true, 
+                                  pattern: "\\d{10,15}" %>
+            <div class="invalid-feedback">A valid mobile number is required.</div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :message, "Query / Seva Requirements *", class: "form-label" %>
+            <%= f.text_area :message, 
+                            value: params[:message],
+                            class: "custom-input", 
+                            rows: 4, 
+                            placeholder: "Write your questions or desired rituals...", 
+                            required: true %>
+            <div class="invalid-feedback">Please enter your message details.</div>
+          </div>
+
+          <div class="mt-4">
+            <%= f.submit "Submit Query", class: "btn-premium btn-saffron w-100 py-3 fs-6" %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- 🔶 Success Card (Hidden by default, shown by Stimulus) -->
+      <div class="bg-white p-4 p-md-5 rounded-3 shadow-lg border text-center d-none" 
+           data-contact-target="successCard" 
+           style="border-top: 5px solid var(--gold-color) !important;">
+        <div class="mb-4">
+          <span class="d-inline-flex justify-content-center align-items-center bg-light border border-success rounded-circle" style="width: 70px; height: 70px;">
+            <i class="fa-solid fa-om text-saffron fs-2"></i>
+          </span>
+        </div>
+
+        <h2 class="h3 fw-bold mb-2" style="font-family: var(--font-heading);">Message Sent!</h2>
+        
+        <div class="alert alert-warning border-0 p-3 my-4 text-start" style="background-color: var(--accent-light); color: var(--primary-color); font-size:15px; border-left: 4px solid var(--secondary-color) !important;">
+          <strong>Om Namah Shivay!</strong> Thank you, <span class="success-name-placeholder fw-bold text-dark">Devotee</span>. 
+          We have received your custom puja inquiry. Our designated temple pandit coordinator will review it and call or email you within 24 hours.
+        </div>
+
+        <%= link_to root_path, class: "btn-premium btn-maroon w-100 py-3 fs-6 text-decoration-none mt-2" do %>
+          <i class="fa-solid fa-house me-2"></i> Back to Homepage
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>

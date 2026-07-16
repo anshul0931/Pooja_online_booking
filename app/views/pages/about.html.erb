@@ -1,50 +1,67 @@
-<section class="about-us py-5">
-  <div class="container">
-    <h1 class="text-center fw-bold mb-5" style="color: #d94f00;">About Us</h1>
+<!-- 🌸 Static Hero Section -->
+<section class="hero-static" style="background-image: url('<%= asset_path('Shree-Mahakaleshwar-Temple.webp') %>');">
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>About Our Seva</h1>
+    <p>Connecting devotees globally to authentic Vedic pujas, direct temple abhishek, and sacred shrines of Ujjain.</p>
+  </div>
+</section>
 
+<!-- 🌸 Content Section -->
+<section class="about-us py-4">
+  <div class="container px-0">
     <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <h3 class="fw-bold mb-3" style="color: #d94f00;">Who We Are</h3>
-        <p style="font-size: 1.1rem; color: #333;">
-          Welcome to <strong>Ujjain – Book My Pooja</strong>, your trusted online platform to book 
-          sacred poojas and rituals directly in Ujjain. We bring the divine experience of 
-          traditional worship to your fingertips — whether you’re at home or miles away.
-        </p>
+      <div class="col-lg-10 col-xl-9">
+        
+        <div class="bg-white rounded-3 shadow-md border p-4 p-md-5 mb-5 scroll-reveal" data-controller="scroll-reveal">
+          <h2 class="h4 fw-bold mb-3 border-bottom pb-2" style="font-family: var(--font-heading);">Who We Are</h2>
+          <p style="font-size: 1.05rem; color: var(--text-primary); line-height: 1.7; font-family: 'Noto Serif', serif; text-align: justify;">
+            Welcome to <strong>Ujjain – Book My Pooja</strong>, your trusted online gateway to experience divine blessings and book sacred pujas in Ujjain. 
+            We make spiritual worship accessible, connecting you to authentic priests and sacred rituals performed right at the banks of Kshipra River and the holy temples of Avantika.
+          </p>
 
-        <h3 class="fw-bold mt-4 mb-3" style="color: #d94f00;">Our Mission</h3>
-        <p style="font-size: 1.1rem; color: #333;">
-          Our mission is to make every pooja simple, authentic, and spiritually fulfilling.  
-          We ensure all rituals are performed with devotion by experienced priests, 
-          while you experience peace and blessings — without any hassle.
-        </p>
+          <h2 class="h4 fw-bold mt-5 mb-3 border-bottom pb-2" style="font-family: var(--font-heading);">Our Mission</h2>
+          <p style="font-size: 1.05rem; color: var(--text-primary); line-height: 1.7; font-family: 'Noto Serif', serif; text-align: justify;">
+            Our mission is to maintain absolute authenticity and devotion in every ritual. We ensure that your prayers are carried out strictly in adherence to Shastras, 
+            complete with proper name and Gotra recitation, allowing devotees anywhere to receive virtual blessings and energized prasad safely.
+          </p>
 
-        <h3 class="fw-bold mt-4 mb-3" style="color: #d94f00;">Why Choose Us?</h3>
-        <ul style="font-size: 1rem; color: #333;">
-          <li>Authentic pooja services in the holy city of Ujjain</li>
-          <li>Trusted and verified priests for every ritual</li>
-          <li>Simple online booking with instant confirmation</li>
-          <li>Perfect for devotees across India and abroad</li>
-        </ul>
+          <h2 class="h4 fw-bold mt-5 mb-3 border-bottom pb-2" style="font-family: var(--font-heading);">Why Devotees Trust Us</h2>
+          <div class="row g-3 mt-2" style="font-size: 15px;">
+            <div class="col-md-6">
+              <div class="p-3 rounded border h-100" style="background-color: var(--bg-color);">
+                <strong style="color: var(--secondary-color);"><i class="fa-solid fa-church me-2"></i> Holy Location</strong>
+                <p class="mb-0 mt-1 text-muted">All rituals are conducted in Ujjain, the center of spiritual energy and land of Mahakaleshwar.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 rounded border h-100" style="background-color: var(--bg-color);">
+                <strong style="color: var(--secondary-color);"><i class="fa-solid fa-user-tie me-2"></i> Verified Priests</strong>
+                <p class="mb-0 mt-1 text-muted">Experienced, certified Vedic pandits execute rituals following rigorous tradition.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 rounded border h-100" style="background-color: var(--bg-color);">
+                <strong style="color: var(--secondary-color);"><i class="fa-solid fa-gift me-2"></i> Prasad Dispatched</strong>
+                <p class="mb-0 mt-1 text-muted">Sacred prasad, threads, and dynamic video snippets are delivered to your home.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 rounded border h-100" style="background-color: var(--bg-color);">
+                <strong style="color: var(--secondary-color);"><i class="fa-solid fa-shield-halved me-2"></i> Payment Safety</strong>
+                <p class="mb-0 mt-1 text-muted">Pay only when the ritual is successfully performed. Zero risk, total devotion.</p>
+              </div>
+            </div>
+          </div>
 
-        <div class="text-center mt-5">
-          <%= link_to "Book Your Pooja", root_path, class: "btn btn-orange btn-lg" %>
+          <div class="text-center mt-5">
+            <%= link_to pujas_path, class: "btn-premium btn-saffron px-5 py-3 fs-6 text-decoration-none" do %>
+              🕉 View Pooja Packages
+            <% end %>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
 </section>
-
-<style>
-.btn-orange {
-  background-color: #d94f00;
-  color: #fff;
-  font-weight: 700;
-  border-radius: 50px;
-  padding: 0.7rem 2rem;
-  transition: background 0.3s, transform 0.2s;
-}
-.btn-orange:hover {
-  background-color: #b74300;
-  transform: translateY(-3px);
-}
-</style>

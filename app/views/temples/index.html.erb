@@ -1,69 +1,59 @@
-<!-- 🔹 Top Bar -->
-<div class="top-bar">
-  <div class="container top-bar-content">
-    <div class="left">
-      <span>📧 <a href="mailto:info@pujaseva.com">info@pujaseva.com</a></span>
-      <span>📞 +91-91 / 9188901230</span>
-    </div>
-    <div class="right">
-      <span class="language-button">हिंदी में देखने के लिए</span>
-      <a href="#"><img src="https://img.icons8.com/color/24/twitter--v1.png"/></a>
-      <a href="#"><img src="https://img.icons8.com/color/24/facebook-new.png"/></a>
-      <a href="#"><img src="https://img.icons8.com/color/24/instagram-new.png"/></a>
-      <a href="#"><img src="https://img.icons8.com/color/24/linkedin.png"/></a>
-      <a href="#"><img src="https://img.icons8.com/color/24/youtube-play.png"/></a>
-    </div>
-  </div>
-</div>
+<%
+# Helper logic to match local assets contextually to Temple names
+def image_for_temple(name)
+  n = name.to_s.downcase
+  if n.include?("mahakal") || n.include?("mahakaleshwar")
+    "Shree-Mahakaleshwar-Temple.webp"
+  elsif n.include?("ganesh") || n.include?("chintaman")
+    "ganeshji.webp"
+  else
+    "Mahakaleshwar.webp"
+  end
+end
+%>
 
-<!-- 🔷 Header Navbar -->
-<header>
-  <div class="container header-content">
-    <div class="logo">
-      <img src="/assets/ganeshjii.jpg" alt="Logo" width="65">
-      <div>
-        <div style="color: #d32f2f; font-weight: bold;">पूजासेवा</div>
-        <div style="font-size: 14px;">pujaseva.com</div>
-      </div>
-    </div>
-
-    <nav>
-      <a href="/" class="active">Home</a>
-      <a href="/about">About us</a>
-      <a href="/services">Services</a>
-      <a href="/contact">Contact us</a>
-    </nav>
-  </div>
-</header>
-
-<!-- 🔹 Hero Section -->
-<section class="hero text-center text-white py-5" style="background: url('/assets/puja-hero.jpg') center/cover no-repeat; position:relative;">
-  <div style="background: rgba(0,0,0,0.4); position:absolute; inset:0;"></div>
-  <div class="container position-relative">
-    <h1 class="fw-bold mb-2">Book Your Pooja</h1>
-    <p class="mb-0">Select from a wide range of Pujas and book instantly</p>
+<!-- 🌸 Static Hero Section -->
+<section class="hero-static" style="background-image: url('<%= asset_path('Shree-Mahakaleshwar-Temple.webp') %>');">
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <h1>🕉 Temples of Ujjain</h1>
+    <p>Perform divine rituals in the most sacred power-centers of Avantika. Explore historical temples and book specialized seva.</p>
   </div>
 </section>
 
-<!-- 🔹 Pujas Cards -->
-<section class="puja-list py-5">
-  <div class="container">
-    <% if @pujas.present? %>
+<!-- 🌸 Booking Policy Alert -->
+<div class="policy-note mb-5 scroll-reveal" data-controller="scroll-reveal">
+  <i class="fa-solid fa-om me-2"></i>
+  <strong>Did you know?</strong> Ujjain (Avantika) is one of the seven sacred moksha-puris and hosts the Shree Mahakaleshwar Jyotirlinga.
+</div>
+
+<!-- 🌸 Temples Listing Grid -->
+<section class="temple-list py-3">
+  <div class="container px-0">
+    <% if @temples.present? %>
       <div class="row g-4">
-        <% @pujas.each do |puja| %>
-          <div class="col-lg-4 col-md-6">
-            <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
-              <% if puja.image.attached? %>
-                <%= image_tag puja.image, class: "card-img-top", style: "height:200px; object-fit:cover;" %>
-              <% else %>
-                <img src="https://via.placeholder.com/300x200" class="card-img-top">
-              <% end %>
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title fw-bold mb-1"><%= puja.name %></h5>
-                <p class="card-text text-muted mb-2" style="font-size: 0.9rem;"><%= truncate(puja.description, length: 100) %></p>
-                <div class="mt-auto d-flex justify-content-between align-items-center">
-                  <span class="fw-bold">₹<%= puja.price %></span>
-                  <%= link_to "Book", puja_path(puja), class: "btn btn-sm btn-primary rounded-2" %>
+        <% @temples.each do |temple| %>
+          <div class="col-lg-4 col-md-6 scroll-reveal" data-controller="scroll-reveal">
+            <div class="temple-card">
+              <!-- Card Image & City Badge -->
+              <div class="card-img-wrap">
+                <%= image_tag image_for_temple(temple.name), class: "card-img", alt: temple.name %>
+                <div class="city-badge"><%= temple.city || "Ujjain" %></div>
+              </div>
+
+              <!-- Card Content -->
+              <div class="card-body">
+                <h3 class="card-title"><%= temple.name %></h3>
+                <p class="text-muted mb-2" style="font-size: 13px;">
+                  <i class="fa-solid fa-location-dot text-saffron me-1"></i> <%= temple.address %>
+                </p>
+                <p class="card-text"><%= truncate(temple.description, length: 120) %></p>
+                
+                <!-- View Temple Action -->
+                <div class="mt-auto pt-3">
+                  <%= link_to temple_path(temple), class: "btn-premium btn-maroon w-100" do %>
+                    🙏 View Temple & Sevas
+                  <% end %>
                 </div>
               </div>
             </div>
@@ -71,102 +61,10 @@
         <% end %>
       </div>
     <% else %>
-      <p class="text-center text-muted mt-4">🙏 No Pujas available right now.</p>
+      <div class="text-center py-5 scroll-reveal" data-controller="scroll-reveal">
+        <span class="fs-1 d-block mb-3">🙏</span>
+        <p class="text-muted fs-5">No Temples registered yet.</p>
+      </div>
     <% end %>
   </div>
 </section>
-
-<!-- 🔹 CSS -->
-<style>
-  /* Top Bar */
-  .top-bar {
-    width: 100%;
-    background-color: #f0501e;
-    color: white;
-    font-size: 14px;
-  }
-
-  .top-bar .top-bar-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 20px;
-  }
-
-  .top-bar .left, .top-bar .right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .top-bar a {
-    color: white;
-    text-decoration: none;
-  }
-
-  .language-button {
-    background: #ffe0b2;
-    color: #000;
-    padding: 3px 8px;
-    border-radius: 5px;
-    font-size: 13px;
-  }
-
-  /* Header */
-  header {
-    width: 100%;
-    background: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-
-  .header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-  }
-
-  header .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  nav a {
-    margin: 0 12px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
-
-  nav a:hover, nav a.active {
-    color: #f44300;
-  }
-
-  /* Hero Section */
-  .hero h1 { font-size: 2.5rem; }
-  .hero p { font-size: 1.1rem; }
-
-  /* Pujas Cards */
-  .card:hover {
-    transform: translateY(-3px);
-    transition: all 0.2s ease;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.15);
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .header-content, .top-bar-content {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    nav a { margin: 0 8px 0 0; }
-  }
-</style>
-
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

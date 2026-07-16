@@ -2,12 +2,12 @@
 <div class="d-flex justify-content-between align-items-center mb-5 pb-3 border-bottom text-center mx-auto" style="max-width: 600px;">
   <div class="step-item text-muted" style="font-size: 13px;">
     <span class="d-inline-flex justify-content-center align-items-center bg-light text-muted border rounded-circle me-1" style="width:24px; height:24px;">1</span>
-    Select Seva
+    Request Custom Seva
   </div>
   <div style="flex-grow:1; height:2px; background-color: var(--gold-color); margin: 0 10px; opacity:0.5;"></div>
   <div class="step-item text-muted" style="font-size: 13px;">
     <span class="d-inline-flex justify-content-center align-items-center bg-light text-muted border rounded-circle me-1" style="width:24px; height:24px;">2</span>
-    Fill Details
+    Describe Ritual
   </div>
   <div style="flex-grow:1; height:2px; background-color: var(--gold-color); margin: 0 10px; opacity:0.5;"></div>
   <div class="step-item text-saffron fw-bold" style="font-size: 13px;">
@@ -26,57 +26,53 @@
         </span>
       </div>
 
-      <h1 class="h3 fw-bold mb-2" style="font-family: var(--font-heading);">Booking Confirmed!</h1>
+      <h1 class="h3 fw-bold mb-2" style="font-family: var(--font-heading);">Request Submitted!</h1>
       <p class="text-muted mb-4" style="font-family: 'Noto Serif', serif; font-style: italic;">
-        May the divine blessings of Lord Shiva bring peace and prosperity to your family.
+        Your custom seva request has been recorded. Our temple coordinators will review details shortly.
       </p>
 
       <!-- Receipt details box -->
       <div class="p-4 rounded-3 text-start mb-4 border" style="background-color: var(--bg-color); font-size: 15px;">
-        <h4 class="h6 text-uppercase fw-bold text-muted border-bottom pb-2 mb-3" style="letter-spacing: 0.5px;">Seva Receipt</h4>
+        <h4 class="h6 text-uppercase fw-bold text-muted border-bottom pb-2 mb-3" style="letter-spacing: 0.5px;">Custom Request Summary</h4>
         
-        <div class="d-flex justify-content-between mb-2">
-          <span class="text-muted">Ritual Seva:</span>
-          <strong class="text-dark"><%= @pooja.title %></strong>
-        </div>
         <div class="d-flex justify-content-between mb-2">
           <span class="text-muted">Devotee Name:</span>
-          <span class="fw-bold text-dark"><%= @booking.user_name %></span>
+          <strong class="text-dark"><%= @custom_booking.user_name %></strong>
         </div>
-        <div class="d-flex justify-content-between mb-2">
-          <span class="text-muted">Gotra:</span>
-          <span class="fw-bold text-dark"><%= @booking.gotra %></span>
-        </div>
-        <div class="d-flex justify-content-between mb-2">
-          <span class="text-muted">Booking Date:</span>
-          <span class="fw-bold text-dark"><%= @booking.booking_date.strftime("%B %d, %Y") %></span>
-        </div>
-        <div class="d-flex justify-content-between mb-2">
-          <span class="text-muted">Contact Mobile:</span>
-          <span class="fw-bold text-dark"><%= @booking.phone %></span>
-        </div>
-        <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
-          <span class="text-muted">Devotee Location:</span>
-          <span class="fw-bold text-dark"><%= @booking.location %></span>
-        </div>
-        
-        <% if @booking.address.present? %>
-          <div class="mb-3 border-bottom pb-2">
-            <span class="text-muted d-block mb-1">Prasad Delivery Address:</span>
-            <span class="fw-bold text-dark"><%= @booking.address %></span>
+        <% if @custom_booking.gotra.present? %>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Gotra:</span>
+            <span class="fw-bold text-dark"><%= @custom_booking.gotra %></span>
           </div>
         <% end %>
-        
-        <div class="d-flex justify-content-between mt-3 pt-1">
-          <span class="fw-bold text-dark fs-5">Offering Amount:</span>
-          <strong class="fs-4" style="color: var(--primary-color);">₹ <%= @booking.total_price.to_i %></strong>
+        <% if @custom_booking.preferred_date.present? %>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Preferred Date:</span>
+            <span class="fw-bold text-dark"><%= @custom_booking.preferred_date.strftime("%B %d, %Y") %></span>
+          </div>
+        <% end %>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Contact Mobile:</span>
+          <span class="fw-bold text-dark"><%= @custom_booking.phone %></span>
+        </div>
+        <% if @custom_booking.location.present? %>
+          <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+            <span class="text-muted">Location:</span>
+            <span class="fw-bold text-dark"><%= @custom_booking.location %></span>
+          </div>
+        <% end %>
+        <div class="mb-2">
+          <span class="text-muted d-block mb-1">Custom Seva Requirements:</span>
+          <p class="mb-0 bg-white p-3 border rounded text-dark" style="font-size: 14px; max-height: 120px; overflow-y: auto;">
+            <%= @custom_booking.seva_description %>
+          </p>
         </div>
       </div>
 
       <!-- Spiritual Note -->
       <div class="alert alert-warning border-0 p-3 mb-5" style="background-color: var(--accent-light); color: var(--primary-color); font-size:14px; text-align: left; border-left: 4px solid var(--secondary-color) !important;">
         <i class="fa-solid fa-om me-2"></i>
-        <strong>Om Namah Shivay!</strong> Our designated priest will contact you on your registered mobile number shortly to guide you about the sankalp timings and the puja livestream.
+        <strong>Om Namah Shivay!</strong> Our designated pandit coordinator will contact you on your registered mobile number shortly to guide you about custom ritual feasibility, auspicious dates/muhurats, dynamic video arrangements, and pricing details.
       </div>
 
       <!-- Action -->

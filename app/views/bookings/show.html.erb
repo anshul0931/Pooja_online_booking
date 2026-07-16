@@ -1,14 +1,27 @@
-<h2>Booking Confirmation</h2>
+<div class="row justify-content-center my-5">
+  <div class="col-md-8 col-lg-6">
+    <div class="bg-white rounded-3 shadow-md border p-4 p-md-5">
+      <h2 class="h4 text-center mb-4 pb-2 border-bottom" style="font-family: var(--font-heading); color: var(--primary-color);">
+        🕉 Booking Details
+      </h2>
 
-<p><strong>Name:</strong> <%= @booking.name %></p>
-<p><strong>Email:</strong> <%= @booking.email %></p>
-<p><strong>Phone:</strong> <%= @booking.phone %></p>
-<p><strong>Puja:</strong> <%= @booking.puja.title %></p>
-<p><strong>Date:</strong> <%= @booking.slot_date %></p>
-<p><strong>Time:</strong> <%= @booking.time_slot %></p>
-<p><strong>Customer Type:</strong> <%= @booking.customer_type %></p>
-<p><strong>Total Amount:</strong> ₹ <%= @booking.total_amount %></p>
+      <div class="p-3 rounded mb-4" style="background-color: var(--bg-color); border: 1px solid var(--border-color); font-size:15px;">
+        <div class="mb-2"><strong>Name:</strong> <%= @booking.user_name %></div>
+        <div class="mb-2"><strong>Email:</strong> <%= @booking.email %></div>
+        <div class="mb-2"><strong>Phone:</strong> <%= @booking.phone %></div>
+        <div class="mb-2"><strong>Gotra:</strong> <%= @booking.gotra %></div>
+        <div class="mb-2"><strong>Pooja Seva:</strong> <%= @booking.puja.title %></div>
+        <div class="mb-2"><strong>Location:</strong> <%= @booking.location %></div>
+        <div class="mb-2"><strong>Residency Type:</strong> <%= @booking.customer_type %></div>
+        <div class="mb-2"><strong>Date:</strong> <%= @booking.booking_date.strftime("%B %d, %Y") %></div>
+        <div><strong>Total Price:</strong> <span class="fw-bold text-maroon">₹ <%= @booking.total_price.to_i %></span></div>
+      </div>
 
-<div class="alert alert-info mt-3">
-  ✅ Your booking is successful! Our team will contact you soon.
+      <div class="alert alert-success border-0 shadow-sm mb-4" style="background-color: var(--accent-light); color: var(--success-color); border-left: 4px solid var(--success-color) !important;">
+        <i class="fa-solid fa-check-circle me-2"></i> Your booking is confirmed. Our team will contact you soon.
+      </div>
+
+      <%= link_to "Go back to Home", root_path, class: "btn-premium btn-maroon w-100 text-center" %>
+    </div>
+  </div>
 </div>

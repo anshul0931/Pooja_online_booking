@@ -1,80 +1,143 @@
-<%= render 'shared/header' %>
+<%
+# Helper logic to match local assets contextually to Puja names
+def local_image_for_puja(title)
+  t = title.to_s.downcase
+  if t.include?("kaal sarp") || t.include?("kalsarp")
+    "kalsarp.webp"
+  elsif t.include?("mangal") || t.include?("bhat") || t.include?("ark") || t.include?("vivah")
+    "ganeshji.webp"
+  elsif t.include?("abhishek") || t.include?("rudrabhishek") || t.include?("mrityunjaya") || t.include?("mahamrityunjaya") || t.include?("shiv")
+    "Mahakaleshwar.webp"
+  elsif t.include?("pitru") || t.include?("shradh") || t.include?("pind") || t.include?("pin_daan") || t.include?("pinda")
+    "pin_daan.webp"
+  elsif t.include?("rin") || t.include?("mukti")
+    "Shree-Mahakaleshwar-Temple.webp"
+  else
+    "ganeshji.webp"
+  end
+end
+%>
 
-<!-- Hero Slider -->
-<div class="swiper mySwiper" style="width:100%; padding:50px 0;">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide"><%= image_tag "Frame-32.png", class: "img-fluid rounded", alt: "Slide 1" %></div>
-    <div class="swiper-slide"><%= image_tag "Frame-25-1.png", class: "img-fluid rounded", alt: "Slide 2" %></div>
-    <div class="swiper-slide"><%= image_tag "images.jpeg", class: "img-fluid rounded", alt: "Slide 3" %></div>
+<!-- 🌸 Premium Hero Image Slider -->
+<section class="hero-slider-container" data-controller="slider">
+  <!-- Slide 1 -->
+  <div class="slide-item active" data-slider-target="slide">
+    <%= image_tag "Shree-Mahakaleshwar-Temple.webp", class: "slide-img", alt: "Sacred Ujjain Temple" %>
+    <div class="slide-overlay"></div>
+    <div class="slide-caption">
+      <h2>Perform Sacred Pujas in Ujjain</h2>
+      <p>Experience authentic online & offline booking at Mahakaleshwar Jyotirlinga, performed by trusted local priests.</p>
+      <%= link_to "Explore Pujas", pujas_path, class: "btn-premium btn-gold" %>
+    </div>
   </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</div>
 
-<!-- Pooja Packages Section -->
-<section class="container my-5">
-  <h2 class="text-center mb-5 fw-bold">Our Pooja Packages</h2>
-  <div class="row g-4">
-    <% @pooja_types.each do |pooja| %>
-      <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card h-100 shadow-sm pooja-card">
-          <!-- Placeholder Pooja Image -->
-          <%= image_tag "https://source.unsplash.com/400x250/?puja,temple", class: "card-img-top", alt: pooja.name %>
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title fw-bold"><%= pooja.name %></h5>
-            <p class="card-text text-muted"><%= pooja.description.truncate(120) %></p>
-            <p class="card-text"><strong>Price:</strong> ₹<%= pooja.price %></p>
-            <p class="card-text"><strong>Duration:</strong> <%= pooja.duration %> min</p>
-            <%= link_to "Book Now", new_puja_booking_path(pooja), class: "btn btn-success mt-auto" %>
-          </div>
-        </div>
-      </div>
-    <% end %>
+  <!-- Slide 2 -->
+  <div class="slide-item" data-slider-target="slide">
+    <%= image_tag "Mahakaleshwar.webp", class: "slide-img", alt: "Mahakal Temple Blessings" %>
+    <div class="slide-overlay"></div>
+    <div class="slide-caption">
+      <h2>Seek Mahakal Blessings</h2>
+      <p>Personalized Vedic rituals performed with devotion, gotra sankalp, and authentic samagri kits.</p>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide-item" data-slider-target="slide">
+    <%= image_tag "ganeshji.webp", class: "slide-img", alt: "Divine Abhishek Ritual" %>
+    <div class="slide-overlay"></div>
+    <div class="slide-caption">
+      <h2>Devotion Beyond Boundaries</h2>
+      <p>Join virtual live-streamed poojas from the comfort of your home and receive blessed prasad delivered to your doorstep.</p>
+      <a href="/about" class="btn-premium btn-gold">About Our Seva</a>
+    </div>
+  </div>
+
+  <!-- Prev/Next Navigation Controls -->
+  <button class="slider-btn prev-btn" data-action="click->slider#prev" aria-label="Previous Slide">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+  <button class="slider-btn next-btn" data-action="click->slider#next" aria-label="Next Slide">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+
+  <!-- Navigation Dots Indicator -->
+  <div class="slider-dots">
+    <button class="dot active" data-slider-target="dot" data-action="click->slider#goTo" data-index="0" aria-label="Slide 1"></button>
+    <button class="dot" data-slider-target="dot" data-action="click->slider#goTo" data-index="1" aria-label="Slide 2"></button>
+    <button class="dot" data-slider-target="dot" data-action="click->slider#goTo" data-index="2" aria-label="Slide 3"></button>
   </div>
 </section>
 
-<%= render 'shared/footer' %>
+<!-- 🌸 Booking Policy Alert Bar -->
+<div class="container mb-5 scroll-reveal" data-controller="scroll-reveal" data-scroll-reveal-target="item">
+  <div class="policy-note d-flex align-items-center gap-3">
+    <span class="fs-3"><i class="fa-solid fa-om text-saffron"></i></span>
+    <div>
+      <strong>Devotees Booking Guarantee:</strong> Book your sacred pooja package in advance today. No advance payment required online — 
+      you pay the full amount <strong>only after the pooja is completed successfully.</strong>
+    </div>
+  </div>
+</div>
 
-<style>
-/* Hero Slider */
-.swiper {
-  border-radius: 15px;
-  overflow: hidden;
-}
+<!-- 🌸 Featured Pooja Packages Section -->
+<section class="container my-5 scroll-reveal" data-controller="scroll-reveal" data-scroll-reveal-target="item">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold mb-2">Our Sacred Pooja Packages</h2>
+    <p class="text-muted" style="max-width: 600px; margin: 0 auto; font-family: 'Noto Serif', serif; font-style: italic;">
+      Select from our curated list of traditional rituals, performed strictly in accordance with Vedic shastras.
+    </p>
+  </div>
+  
+  <% if @pujas.any? %>
+    <div class="row g-4">
+      <% @pujas.each do |puja| %>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="pooja-card">
+            <!-- Card Image & Price -->
+            <div class="card-img-wrap">
+              <% if puja.image.attached? %>
+                <%= image_tag puja.image, class: "card-img", alt: puja.title %>
+              <% else %>
+                <%= image_tag local_image_for_puja(puja.title), class: "card-img", alt: puja.title %>
+              <% end %>
+              <div class="price-badge">₹<%= puja.base_price.to_i %></div>
+            </div>
+            
+            <!-- Card Content -->
+            <div class="card-body">
+              <h3 class="card-title"><%= puja.title %></h3>
+              <p class="card-text"><%= puja.description.to_s.truncate(120) %></p>
+              
+              <!-- Metadata & CTA -->
+              <div class="card-meta">
+                <div class="meta-item">
+                  <i class="fa-regular fa-clock"></i> <%= puja.duration_minutes || 60 %> mins
+                </div>
+                <div class="meta-item">
+                  <i class="fa-solid fa-location-dot"></i> Ujjain
+                </div>
+              </div>
+              
+              <!-- Book Button linking to this specific puja's show page -->
+              <div class="mt-4">
+                <%= link_to puja_path(puja), class: "btn-premium btn-maroon w-100" do %>
+                  🕉 View & Book Seva
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- Fallback when no Pujas are in the database yet -->
+    <div class="text-center py-5">
+      <span class="fs-1 d-block mb-3">🙏</span>
+      <p class="text-muted fs-5 mb-4">Our pooja packages are being set up. Browse all available rituals below.</p>
+      <%= link_to pujas_path, class: "btn-premium btn-saffron px-5 py-3 fs-6" do %>
+        View All Pujas
+      <% end %>
+    </div>
+  <% end %>
+</section>
 
-/* Pooja Cards */
-.pooja-card {
-  border-radius: 15px;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.pooja-card:hover {
-  transform: translateY(-7px);
-  box-shadow: 0 20px 30px rgba(0,0,0,0.2);
-}
-
-/* Buttons */
-.btn-success {
-  border-radius: 50px;
-  padding: 0.5rem 1.5rem;
-  font-weight: bold;
-  transition: transform 0.2s, background-color 0.2s;
-}
-.btn-success:hover {
-  transform: translateY(-2px);
-  background-color: #28a745cc;
-}
-
-/* Headings */
-h2 {
-  font-size: 2.5rem;
-}
-
-/* Responsive tweaks */
-@media(max-width:768px){
-  .pooja-card img {
-    height: 200px;
-    object-fit: cover;
-  }
-}
-</style>
