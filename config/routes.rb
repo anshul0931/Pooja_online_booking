@@ -21,4 +21,14 @@ Rails.application.routes.draw do
   end
 
   get "bookings/:id/thank_you", to: "bookings#thank_you", as: "thank_you_booking"
+
+  namespace :api do
+    namespace :v1 do
+      resources :pujas, only: [:index, :show]
+      resources :temples, only: [:index, :show]
+      resources :bookings, only: [:create]
+      resources :custom_bookings, only: [:create]
+      get 'home', to: 'home#index'
+    end
+  end
 end

@@ -24,6 +24,7 @@ gem "stimulus-rails"
 
 # Build JSON APIs with ease
 gem "jbuilder"
+gem "rack-cors"
 gem 'activeadmin'
 gem 'devise' 
 # Gemfile
