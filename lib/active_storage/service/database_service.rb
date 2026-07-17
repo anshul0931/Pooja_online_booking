@@ -1,97 +1,99 @@
 # frozen_string_literal: true
 
-require "active_storage/service/disk_service"
+require "active_storage/service"
 
 module ActiveStorage
-  class Service::DatabaseService < Service::DiskService
-    def initialize(root:, **options)
-      super(root: root, **options)
+  class Service::DatabaseService < Service
+    def initialize(**options)
+      # Accept any configuration options (like root) from storage.yml
+      Rails.logger.info "[DatabaseService] Initialized"
     end
 
     def upload(key, io, checksum: nil, **options)
       instrument :upload, key: key, checksum: checksum do
+        Rails.logger.info "[DatabaseService] Uploading key: #{key}"
+        
+        io.rewind if io.respond_to?(:rewind)
         data = io.read
+        
+        Rails.logger.info "[DatabaseService] Upload key: #{key}, read #{data&.bytesize || 0} bytes"
 
-        # Store in the database
         blob = ActiveStorage::Blob.find_by!(key: key)
         blob.update!(data: data)
 
-        # Write to the local cache directory so it's immediately available to DiskController
-        write_to_local_cache(key, data)
+        Rails.logger.info "[DatabaseService] Database blob updated for key: #{key}"
       end
     end
 
     def download(key, &block)
+      Rails.logger.info "[DatabaseService] Download called for key: #{key} (block given: #{block_given?})"
+      
+      blob = ActiveStorage::Blob.find_by!(key: key)
+      data = blob.data || raise(ActiveStorage::FileNotFoundError)
+
       if block_given?
         instrument :streaming_download, key: key do
-          yield data_for(key)
+          yield data
         end
       else
         instrument :download, key: key do
-          data_for(key)
+          data
         end
       end
     end
 
     def download_chunk(key, range)
+      Rails.logger.info "[DatabaseService] Download chunk called for key: #{key}, range: #{range}"
+      
+      blob = ActiveStorage::Blob.find_by!(key: key)
+      data = blob.data || raise(ActiveStorage::FileNotFoundError)
+
       instrument :download_chunk, key: key, range: range do
-        data_for(key)[range]
+        data.byteslice(range)
       end
     end
 
     def exist?(key)
       instrument :exist, key: key do |payload|
         exists = ActiveStorage::Blob.where(key: key).where.not(data: nil).exists?
+        Rails.logger.info "[DatabaseService] Exist? for key: #{key} returned: #{exists}"
         payload[:exist] = exists
         exists
       end
     end
 
     def delete(key)
+      Rails.logger.info "[DatabaseService] Delete called for key: #{key}"
       instrument :delete, key: key do
-        # Nullify database data
         blob = ActiveStorage::Blob.find_by(key: key)
         blob.update!(data: nil) if blob
-
-        # Delete local cache file if it exists
-        begin
-          File.delete(path_for_raw_key(key))
-        rescue Errno::ENOENT
-        end
       end
     end
 
-    def path_for(key)
-      ensure_local_cache(key)
-      path_for_raw_key(key)
+    def delete_prefixed(prefix)
+      Rails.logger.info "[DatabaseService] Delete prefixed called for prefix: #{prefix}"
+      instrument :delete_prefixed, prefix: prefix do
+        ActiveStorage::Blob.where("key LIKE ?", "#{prefix}%").update_all(data: nil)
+      end
     end
 
-    private
-
-    def data_for(key)
+    def url(key, expires_in:, filename:, disposition:, content_type:, **options)
+      Rails.logger.info "[DatabaseService] Generating URL for key: #{key}"
+      
       blob = ActiveStorage::Blob.find_by!(key: key)
-      blob.data || raise(ActiveStorage::FileNotFoundError)
-    end
+      
+      # Use Rails' built-in route helper to generate proxy/redirect url
+      url_options = (ActiveStorage::Current.url_options || {}).reverse_merge(
+        host: Rails.application.config.action_controller.default_url_options[:host]
+      )
 
-    def path_for_raw_key(key)
-      # DiskService's path_for
-      super(key)
-    end
-
-    def ensure_local_cache(key)
-      cache_path = path_for_raw_key(key)
-      unless File.exist?(cache_path)
-        blob = ActiveStorage::Blob.find_by(key: key)
-        if blob && blob.data
-          write_to_local_cache(key, blob.data)
-        end
-      end
-    end
-
-    def write_to_local_cache(key, data)
-      cache_path = path_for_raw_key(key)
-      FileUtils.mkdir_p(File.dirname(cache_path))
-      File.binwrite(cache_path, data)
+      Rails.application.routes.url_helpers.rails_storage_proxy_url(
+        blob,
+        host: url_options[:host],
+        protocol: url_options[:protocol],
+        port: url_options[:port],
+        disposition: disposition
+      )
     end
   end
 end
