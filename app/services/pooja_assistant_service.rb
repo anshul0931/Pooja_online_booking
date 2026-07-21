@@ -1,9 +1,9 @@
 class PoojaAssistantService
-  API_URL = "https://api.anthropic.com/v1/messages"
+  API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
   def self.get_reply(customer_message)
-    api_key = Rails.application.credentials.dig(:anthropic, :api_key)
-    
+    api_key = Rails.application.credentials.dig(:groq, :api_key)
+
     if api_key.blank?
       return fallback_message("API key not configured.")
     end
@@ -44,23 +44,22 @@ class PoojaAssistantService
     end
 
     response = conn.post do |req|
-      req.headers['x-api-key'] = api_key
-      req.headers['anthropic-version'] = '2023-06-01'
-      req.headers['content-type'] = 'application/json'
+      req.headers['Authorization'] = "Bearer #{api_key}"
+      req.headers['Content-Type'] = 'application/json'
       req.body = {
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1000,
-        system: system_prompt,
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 300,
         messages: [
+          { role: 'system', content: system_prompt },
           { role: 'user', content: customer_message }
         ]
       }
     end
 
     if response.success?
-      response.body.dig('content', 0, 'text') || fallback_message("Unable to parse assistant reply.")
+      response.body.dig('choices', 0, 'message', 'content') || fallback_message("Unable to parse assistant reply.")
     else
-      Rails.logger.error("Anthropic API Error: #{response.status} - #{response.body}")
+      Rails.logger.error("Groq API Error: #{response.status} - #{response.body}")
       fallback_message("API returned an error: #{response.status}")
     end
   rescue => e
