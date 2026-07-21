@@ -1,7 +1,7 @@
 class PoojaAssistantService
   API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-  def self.get_reply(customer_message, phone_number = nil)
+  def self.get_reply(customer_message, identifier = nil)
     api_key = Rails.application.credentials.dig(:groq, :api_key)
 
     if api_key.blank?
@@ -35,39 +35,47 @@ class PoojaAssistantService
       2. If a customer wants to book a pooja or asks how to book, guide them to: "Pujas page pe jaake Book Now click karein" (or go to the Pujas page and click Book Now).
       3. Keep responses relatively short, polite, and respectful. Use emojis like 🕉️, 🙏, 🌸 where appropriate.
       4. Agar customer koi aisi pooja poochein jo upar ki list mein NAHI hai, to unhe yeh mat bolo ki 'available nahi hai' ya ignore mat karo. Iske bajay bolo: 'Yeh specific pooja hamari standard list mein nahi hai, lekin hum custom pooja bhi arrange kar sakte hain aapki zaroorat ke hisaab se. Kripya humein +91-7987488586 par call/WhatsApp karein, ya humari website ke Custom Booking page par apni requirement bhar dein, hum aapse contact karenge.'
-      5. Agar customer booking karwana chahe ('mere naam se book kar do' jaisa kuch bole), to unse ek-ek karke yeh saari details maango (jo already de chuke hain wo dobara mat maango):
-         - Poora naam
-         - Pooja ka naam
-         - Booking date (agar customer sirf din bole jaise 'date 22', to poochna kaunsa month, aur convert karna YYYY-MM-DD format mein, current date #{Date.today} ke hisaab se agar month customer na bataye to agla aane wala date maanna)
-         - Phone number (10 digit)
-         - Email address
-         - Customer type: Indian ya NRI
-         - Location/City (jaha pooja karwani hai)
-         - Gotra
-         
-         Jab tak yeh SAAB 8 cheezein na mil jayein, BOOKING_DATA mat likhna — sirf agla missing field poochte raho, ek time pe ek hi sawaal.
-         
-         Jab sab mil jaye, reply ke END mein naye line mein likho:
-         BOOKING_DATA: {"puja_name": "...", "customer_name": "...", "phone": "...", "email": "...", "customer_type": "Indian ya NRI", "date": "YYYY-MM-DD", "location": "...", "gotra": "..."}
+      5. Agar customer booking karna chahta hai ('book kar do', 'mere naam se book karo' jaisa kuch bole), to check karo abhi tak conversation mein kya-kya details already mil chuki hain (naam, pooja, date, phone, email, customer type, location, gotra). 
+
+         Jo bhi details missing hain, unn SABKO EK HI message mein ek sath poocho, alag-alag turn mein mat poocho. Jaise agar sirf naam pata hai, to bolo:
+
+         'Booking confirm karne ke liye kripya yeh saari details ek sath bhej dijiye:
+         1. Pooja ka naam
+         2. Date (kis din karwani hai - current date #{Date.today} ke hisaab se)
+         3. Phone number
+         4. Email
+         5. Customer type (Indian ya NRI)
+         6. Location/City
+         7. Gotra'
+
+         Agar customer sab ek sath bhi de de ya thodi-thodi karke bhi de, jab bhi saari 8 cheezein (naam+pooja+date+phone+email+customer_type+location+gotra) mil jayein, turant BOOKING_DATA line likho reply ke end mein, wait mat karo confirmation ke liye — seedha book kar do aur customer ko confirm bata do.
+
+         BOOKING_DATA: {"puja_name": "...", "customer_name": "...", "phone": "...", "email": "...", "customer_type": "...", "date": "YYYY-MM-DD", "location": "...", "gotra": "..."}
       6. Agar customer ne pehle hi kisi field ki info di hai (jaise naam ya pooja), to use dobara mat poochna, sirf missing fields poochna. Hamesha Hinglish (Roman script) mein hi reply karna, Devanagari script kabhi use mat karna.
     SYSTEM
 
     # Build conversation messages payload
     messages_payload = [{ role: 'system', content: system_prompt }]
 
-    if phone_number.present? && defined?(ConversationMessage)
-      history_messages = ConversationMessage.where(phone_number: phone_number)
+    if identifier.present? && defined?(ConversationMessage)
+      history_messages = ConversationMessage.where(identifier: identifier)
                                            .order(created_at: :desc)
                                            .limit(10)
                                            .reverse
 
+      Rails.logger.info("[PoojaAssistantService] Found #{history_messages.size} previous messages for identifier: #{identifier}")
+
       history_messages.each do |msg|
         messages_payload << { role: msg.role, content: msg.content }
       end
+    else
+      Rails.logger.info("[PoojaAssistantService] No identifier provided or ConversationMessage undefined. Proceeding without history.")
     end
 
     # Append current user message
     messages_payload << { role: 'user', content: customer_message }
+
+    Rails.logger.info("[PoojaAssistantService] Sending request to Groq API with #{messages_payload.size} total messages (including system prompt).")
 
     # Faraday connection
     conn = Faraday.new(url: API_URL) do |f|
@@ -90,13 +98,14 @@ class PoojaAssistantService
       raw_reply = response.body.dig('choices', 0, 'message', 'content') || fallback_message("Unable to parse assistant reply.")
       final_reply = process_reply_and_create_booking(raw_reply)
 
-      # Save conversation history if phone_number is present
-      if phone_number.present? && defined?(ConversationMessage)
+      # Save conversation history if identifier is present
+      if identifier.present? && defined?(ConversationMessage)
         begin
-          ConversationMessage.create(phone_number: phone_number, role: 'user', content: customer_message)
-          ConversationMessage.create(phone_number: phone_number, role: 'assistant', content: final_reply)
+          ConversationMessage.create(identifier: identifier, role: 'user', content: customer_message)
+          ConversationMessage.create(identifier: identifier, role: 'assistant', content: final_reply)
+          Rails.logger.info("[PoojaAssistantService] Saved new conversation messages to DB for identifier: #{identifier}")
         rescue => e
-          Rails.logger.error("Failed to save ConversationMessage: #{e.message}")
+          Rails.logger.error("[PoojaAssistantService] Failed to save ConversationMessage: #{e.message}")
         end
       end
 

@@ -9,7 +9,10 @@ class AssistantController < ApplicationController
       return
     end
 
-    reply = PoojaAssistantService.get_reply(message)
+    session[:chat_session_id] ||= SecureRandom.uuid
+    chat_identifier = session[:chat_session_id]
+
+    reply = PoojaAssistantService.get_reply(message, chat_identifier)
     render json: { reply: reply }
   end
 end
