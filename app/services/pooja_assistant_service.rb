@@ -1,7 +1,7 @@
 class PoojaAssistantService
   API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
-  def self.get_reply(customer_message)
+  def self.get_reply(customer_message, phone_number = nil)
     api_key = Rails.application.credentials.dig(:groq, :api_key)
 
     if api_key.blank?
@@ -49,7 +49,25 @@ class PoojaAssistantService
          
          Jab sab mil jaye, reply ke END mein naye line mein likho:
          BOOKING_DATA: {"puja_name": "...", "customer_name": "...", "phone": "...", "email": "...", "customer_type": "Indian ya NRI", "date": "YYYY-MM-DD", "location": "...", "gotra": "..."}
+      6. Agar customer ne pehle hi kisi field ki info di hai (jaise naam ya pooja), to use dobara mat poochna, sirf missing fields poochna. Hamesha Hinglish (Roman script) mein hi reply karna, Devanagari script kabhi use mat karna.
     SYSTEM
+
+    # Build conversation messages payload
+    messages_payload = [{ role: 'system', content: system_prompt }]
+
+    if phone_number.present? && defined?(ConversationMessage)
+      history_messages = ConversationMessage.where(phone_number: phone_number)
+                                           .order(created_at: :desc)
+                                           .limit(10)
+                                           .reverse
+
+      history_messages.each do |msg|
+        messages_payload << { role: msg.role, content: msg.content }
+      end
+    end
+
+    # Append current user message
+    messages_payload << { role: 'user', content: customer_message }
 
     # Faraday connection
     conn = Faraday.new(url: API_URL) do |f|
@@ -64,16 +82,25 @@ class PoojaAssistantService
       req.body = {
         model: 'llama-3.3-70b-versatile',
         max_tokens: 400,
-        messages: [
-          { role: 'system', content: system_prompt },
-          { role: 'user', content: customer_message }
-        ]
+        messages: messages_payload
       }
     end
 
     if response.success?
       raw_reply = response.body.dig('choices', 0, 'message', 'content') || fallback_message("Unable to parse assistant reply.")
-      process_reply_and_create_booking(raw_reply)
+      final_reply = process_reply_and_create_booking(raw_reply)
+
+      # Save conversation history if phone_number is present
+      if phone_number.present? && defined?(ConversationMessage)
+        begin
+          ConversationMessage.create(phone_number: phone_number, role: 'user', content: customer_message)
+          ConversationMessage.create(phone_number: phone_number, role: 'assistant', content: final_reply)
+        rescue => e
+          Rails.logger.error("Failed to save ConversationMessage: #{e.message}")
+        end
+      end
+
+      final_reply
     else
       Rails.logger.error("Groq API Error: #{response.status} - #{response.body}")
       fallback_message("API returned an error: #{response.status}")

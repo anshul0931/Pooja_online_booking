@@ -23,7 +23,7 @@ class WhatsappController < ApplicationController
 
     if message.present? && from.present?
       Thread.new do
-        reply = PoojaAssistantService.get_reply(message)
+        reply = PoojaAssistantService.get_reply(message, from)
         WhatsAppSenderService.send_message(from, reply)
       rescue => e
         Rails.logger.error("WhatsApp Controller background processing error: #{e.message}")
