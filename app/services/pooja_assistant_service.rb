@@ -35,9 +35,20 @@ class PoojaAssistantService
       2. If a customer wants to book a pooja or asks how to book, guide them to: "Pujas page pe jaake Book Now click karein" (or go to the Pujas page and click Book Now).
       3. Keep responses relatively short, polite, and respectful. Use emojis like 🕉️, 🙏, 🌸 where appropriate.
       4. Agar customer koi aisi pooja poochein jo upar ki list mein NAHI hai, to unhe yeh mat bolo ki 'available nahi hai' ya ignore mat karo. Iske bajay bolo: 'Yeh specific pooja hamari standard list mein nahi hai, lekin hum custom pooja bhi arrange kar sakte hain aapki zaroorat ke hisaab se. Kripya humein +91-7987488586 par call/WhatsApp karein, ya humari website ke Custom Booking page par apni requirement bhar dein, hum aapse contact karenge.'
-      5. Agar customer apna naam, pooja ka naam, aur date de de aur bole 'mere naam se book kar do' ya similar, to tumhe pehle unse phone number bhi maang lena hai agar nahi diya. Jab teeno cheezein (naam, pooja, date) aur phone mil jayein, to apne reply ke bilkul END mein is exact format mein ek line add karo (customer ko yeh line nahi dikhni chahiye, isliye normal reply ke baad naye line mein likhna):
-      BOOKING_DATA: {"puja_name": "<pooja ka naam>", "customer_name": "<naam>", "phone": "<number>", "date": "<YYYY-MM-DD format mein>"}
-      Agar koi info missing hai, BOOKING_DATA mat likhna, pehle pooch lena missing cheez.
+      5. Agar customer booking karwana chahe ('mere naam se book kar do' jaisa kuch bole), to unse ek-ek karke yeh saari details maango (jo already de chuke hain wo dobara mat maango):
+         - Poora naam
+         - Pooja ka naam
+         - Booking date (agar customer sirf din bole jaise 'date 22', to poochna kaunsa month, aur convert karna YYYY-MM-DD format mein, current date #{Date.today} ke hisaab se agar month customer na bataye to agla aane wala date maanna)
+         - Phone number (10 digit)
+         - Email address
+         - Customer type: Indian ya NRI
+         - Location/City (jaha pooja karwani hai)
+         - Gotra
+         
+         Jab tak yeh SAAB 8 cheezein na mil jayein, BOOKING_DATA mat likhna — sirf agla missing field poochte raho, ek time pe ek hi sawaal.
+         
+         Jab sab mil jaye, reply ke END mein naye line mein likho:
+         BOOKING_DATA: {"puja_name": "...", "customer_name": "...", "phone": "...", "email": "...", "customer_type": "Indian ya NRI", "date": "YYYY-MM-DD", "location": "...", "gotra": "..."}
     SYSTEM
 
     # Faraday connection
@@ -52,7 +63,7 @@ class PoojaAssistantService
       req.headers['Content-Type'] = 'application/json'
       req.body = {
         model: 'llama-3.3-70b-versatile',
-        max_tokens: 300,
+        max_tokens: 400,
         messages: [
           { role: 'system', content: system_prompt },
           { role: 'user', content: customer_message }
@@ -83,33 +94,47 @@ class PoojaAssistantService
     json_str = parts[1].to_s.strip
 
     booking_created = false
+    validation_error_occurred = false
 
     begin
       data = JSON.parse(json_str)
-      puja_name = data["puja_name"]
-      customer_name = data["customer_name"]
-      phone = data["phone"]
-      date = data["date"]
+      
+      required_keys = %w[puja_name customer_name phone email customer_type date location gotra]
+      missing_keys = required_keys.select { |k| data[k].blank? }
 
-      if puja_name.present? && customer_name.present? && phone.present? && date.present?
-        puja = Puja.find_by("title LIKE ?", "%#{puja_name}%")
+      if missing_keys.empty?
+        puja = Puja.find_by("title LIKE ?", "%#{data['puja_name']}%")
         if puja.present?
-          Booking.create!(
+          booking = Booking.new(
             puja_id: puja.id,
-            user_name: customer_name,
-            phone: phone,
-            booking_date: date,
+            user_name: data['customer_name'],
+            phone: data['phone'],
+            email: data['email'],
+            customer_type: data['customer_type'],
+            booking_date: data['date'],
+            location: data['location'],
+            gotra: data['gotra'],
             total_price: puja.base_price
           )
-          booking_created = true
+
+          if booking.save
+            booking_created = true
+          else
+            validation_error_occurred = true
+            Rails.logger.error("PoojaAssistantService Booking Validation Errors: #{booking.errors.full_messages.join(', ')}")
+          end
         end
       end
+    rescue JSON::ParserError => e
+      Rails.logger.error("PoojaAssistantService JSON Parse Error: #{e.message}")
     rescue => e
-      Rails.logger.error("PoojaAssistantService Booking Creation Error: #{e.message}")
+      Rails.logger.error("PoojaAssistantService Booking Exception: #{e.message}")
     end
 
     if booking_created
       "#{clean_reply}\n\n✅ Aapki booking confirm ho gayi hai!"
+    elsif validation_error_occurred
+      "#{clean_reply}\n\nKuch details miss ho gayi lagti hain, kripya dobara try karein ya humein call karein: +91-7987488586"
     else
       clean_reply
     end
