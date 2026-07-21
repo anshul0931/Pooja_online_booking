@@ -29,6 +29,7 @@ gem 'activeadmin'
 gem 'devise' 
 # Gemfile
 gem 'sassc-rails'
+gem 'faraday'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"

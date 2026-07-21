@@ -127,7 +127,391 @@
     </div>
   </footer>
 
+  <!-- AI Pooja Assistant Chat Widget -->
+  <div id="pooja-assistant-widget" class="pooja-assistant-container">
+    <!-- Toggle Button -->
+    <button id="pooja-assistant-toggle" class="pooja-assistant-btn" aria-label="Open Pooja Assistant">
+      <span class="assistant-icon">🕉️</span>
+      <span class="assistant-text">Pooja Assistant</span>
+    </button>
+
+    <!-- Chat Box Window -->
+    <div id="pooja-assistant-chatbox" class="pooja-assistant-box hidden">
+      <div class="pooja-assistant-header">
+        <div class="header-title">
+          <span class="icon">🕉️</span>
+          <div>
+            <strong>Pooja Assistant</strong>
+            <small>Online Booking Support</small>
+          </div>
+        </div>
+        <button id="pooja-assistant-close" class="close-btn" aria-label="Close Chat">&times;</button>
+      </div>
+
+      <!-- Messages Area -->
+      <div id="pooja-assistant-messages" class="pooja-assistant-body">
+        <div class="message system">
+          <div class="message-content">
+            Pranam! 🙏 Main aapki pooja booking aur temples ke baare mein jaankari dene ke liye haazir hoon. Aap mujhse koi bhi sawaal pooch sakte hain.
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="pooja-assistant-footer">
+        <input type="text" id="pooja-assistant-input" placeholder="Apna sawaal likhein..." aria-label="Type your message">
+        <button id="pooja-assistant-send" aria-label="Send message">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Styling for the floating chat widget */
+    .pooja-assistant-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1050;
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .pooja-assistant-btn {
+      background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(180, 83, 9, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .pooja-assistant-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(180, 83, 9, 0.5);
+    }
+
+    .pooja-assistant-btn .assistant-icon {
+      font-size: 1.3rem;
+      animation: spin-pulse 3s infinite linear;
+    }
+
+    .pooja-assistant-box {
+      width: 350px;
+      max-width: calc(100vw - 48px);
+      height: 480px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(180, 83, 9, 0.15);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pooja-assistant-box.hidden {
+      display: none;
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+
+    .pooja-assistant-header {
+      background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+      color: #ffffff;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pooja-assistant-header .header-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pooja-assistant-header .header-title strong {
+      display: block;
+      font-size: 0.95rem;
+      line-height: 1.2;
+    }
+
+    .pooja-assistant-header .header-title small {
+      font-size: 0.75rem;
+      opacity: 0.85;
+      display: block;
+    }
+
+    .pooja-assistant-header .close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 1.6rem;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      padding: 0 5px;
+      line-height: 1;
+    }
+
+    .pooja-assistant-header .close-btn:hover {
+      opacity: 1;
+    }
+
+    .pooja-assistant-body {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background-color: #FDFBF7;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pooja-assistant-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .pooja-assistant-body::-webkit-scrollbar-track {
+      background: #F1F1F1;
+    }
+    .pooja-assistant-body::-webkit-scrollbar-thumb {
+      background: #C1C1C1;
+      border-radius: 4px;
+    }
+
+    .message {
+      max-width: 85%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message.system {
+      align-self: flex-start;
+    }
+
+    .message.user {
+      align-self: flex-end;
+    }
+
+    .message-content {
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .message.system .message-content {
+      background-color: #ffffff;
+      color: #374151;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-top-left-radius: 2px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    }
+
+    .message.user .message-content {
+      background-color: #B45309;
+      color: #ffffff;
+      border-top-right-radius: 2px;
+      box-shadow: 0 2px 5px rgba(180, 83, 9, 0.1);
+    }
+
+    .pooja-assistant-footer {
+      padding: 12px 15px;
+      border-top: 1px solid #E5E7EB;
+      display: flex;
+      gap: 8px;
+      background: #ffffff;
+    }
+
+    .pooja-assistant-footer input {
+      flex: 1;
+      border: 1px solid #D1D5DB;
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .pooja-assistant-footer input:focus {
+      border-color: #B45309;
+    }
+
+    .pooja-assistant-footer button {
+      background-color: #B45309;
+      color: #ffffff;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .pooja-assistant-footer button:hover {
+      background-color: #92400E;
+    }
+
+    .pooja-assistant-footer button:active {
+      transform: scale(0.95);
+    }
+
+    .typing-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+    }
+
+    .typing-indicator span {
+      width: 6px;
+      height: 6px;
+      background-color: #9CA3AF;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1.0); }
+    }
+
+    @keyframes spin-pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const toggleBtn = document.getElementById("pooja-assistant-toggle");
+      const chatBox = document.getElementById("pooja-assistant-chatbox");
+      const closeBtn = document.getElementById("pooja-assistant-close");
+      const sendBtn = document.getElementById("pooja-assistant-send");
+      const chatInput = document.getElementById("pooja-assistant-input");
+      const messagesContainer = document.getElementById("pooja-assistant-messages");
+
+      // Open Chatbox
+      toggleBtn.addEventListener("click", function() {
+        chatBox.classList.remove("hidden");
+        toggleBtn.style.display = "none";
+        chatInput.focus();
+        scrollToBottom();
+      });
+
+      // Close Chatbox
+      closeBtn.addEventListener("click", function() {
+        chatBox.classList.add("hidden");
+        toggleBtn.style.display = "flex";
+      });
+
+      // Send Message function
+      async function sendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // Add user message
+        appendMessage(text, 'user');
+        chatInput.value = '';
+
+        // Add typing indicator
+        const indicatorId = addTypingIndicator();
+        scrollToBottom();
+
+        try {
+          const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+          
+          const response = await fetch('/assistant/ask', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken || ''
+            },
+            body: JSON.stringify({ message: text })
+          });
+
+          removeTypingIndicator(indicatorId);
+
+          if (response.ok) {
+            const data = await response.json();
+            appendMessage(data.reply, 'system');
+          } else {
+            const data = await response.json().catch(() => ({}));
+            appendMessage(data.reply || 'Pranam! 🙏 Kuch takneeki dikkat aa rahi hai. Kripya humare helpline number +91-7987488586 par call ya WhatsApp karein.', 'system');
+          }
+        } catch (error) {
+          console.error("Assistant Error:", error);
+          removeTypingIndicator(indicatorId);
+          appendMessage('Pranam! 🙏 Internet ya connection me samasya hai. Kripya humare helpline number +91-7987488586 par call ya WhatsApp karein.', 'system');
+        }
+
+        scrollToBottom();
+      }
+
+      function appendMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender);
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('message-content');
+        contentDiv.innerText = text;
+        
+        messageDiv.appendChild(contentDiv);
+        messagesContainer.appendChild(messageDiv);
+      }
+
+      function addTypingIndicator() {
+        const id = 'typing-' + Date.now();
+        const indicatorDiv = document.createElement('div');
+        indicatorDiv.id = id;
+        indicatorDiv.classList.add('message', 'system');
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('message-content', 'typing-indicator');
+        contentDiv.innerHTML = '<span></span><span></span><span></span>';
+        
+        indicatorDiv.appendChild(contentDiv);
+        messagesContainer.appendChild(indicatorDiv);
+        return id;
+      }
+
+      function removeTypingIndicator(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+      }
+
+      function scrollToBottom() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      // Event Listeners for action
+      sendBtn.addEventListener("click", sendMessage);
+      
+      chatInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+    });
+  </script>
+
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

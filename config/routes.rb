@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  post "/assistant/ask", to: "assistant#ask"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -31,4 +32,6 @@ Rails.application.routes.draw do
       get 'home', to: 'home#index'
     end
   end
+  get  "/whatsapp/webhook", to: "whatsapp#verify"
+  post "/whatsapp/webhook", to: "whatsapp#incoming"
 end
