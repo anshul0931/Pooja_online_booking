@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_21_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_21_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,12 +90,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_21_120000) do
   end
 
   create_table "conversation_messages", force: :cascade do |t|
-    t.string "phone_number", null: false
+    t.string "identifier", null: false
     t.string "role", null: false
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["phone_number"], name: "index_conversation_messages_on_phone_number"
+    t.index ["identifier"], name: "index_conversation_messages_on_identifier"
   end
 
   create_table "custom_bookings", force: :cascade do |t|
